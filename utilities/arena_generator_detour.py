@@ -8,7 +8,7 @@ if os.name == 'nt': # Windows
 else:
     basePath = '../'
     
-def create_arena(seed, number):
+def create_arena_detour(seed, number):
     arenas_list = []
     random.seed(seed)
     #print ('Arena Seed: '+str(seed))

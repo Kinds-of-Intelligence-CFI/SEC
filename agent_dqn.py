@@ -10,7 +10,7 @@ import tensorflow as tf
 from keras.models import Model, load_model
 from keras.layers import Dense, Flatten, Input, MaxPooling2D
 
-sys.path.append('./models/')
+sys.path.append('./DAC/')
 from RandomReactiveLayer import ReactiveLayer as RL
 
 

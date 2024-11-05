@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 
 sys.path.append('./utilities/')
 #sys.path.insert(0, "/root/capsule/code/sec/utilities/")
-
 from arena_generator_lvl4 import create_arena
 
 sys.path.append('../AnimalAI-Olympics/animalai/')
@@ -14,13 +13,12 @@ from matplotlib.animation import FuncAnimation
 from keras.models import Model
 from animalai.envs import UnityEnvironment
 from animalai.envs.arena_config import ArenaConfig
-from arena_generator_lvl4 import create_arena
 
 
 def id_generator(length=8, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for i in range(length))
 
-def create_env(seed, work_id, basePath, arenas_n=10, docker=True, env_view=True, save_data=False, capsule=True):
+def create_env(seed, work_id, basePath, game_ID='doubleTmaze', arenas_n=10, docker=True, env_view=True, save_data=False, capsule=True):
     env = UnityEnvironment(
         file_name=basePath+'AnimalAI',  # Path to the environment
         #worker_id=np.random.randint(1,10),  # Unique ID for running the environment (used for connection)
@@ -36,9 +34,35 @@ def create_env(seed, work_id, basePath, arenas_n=10, docker=True, env_view=True,
     if arenas_n > 0:
         arenas = create_arena(seed, arenas_n)
     else:
-        #arenas = ['newdac_01.yaml']
-        arenas = ['newdac_01.yaml', 'newdac_02.yaml', 'newdac_03.yaml', 'newdac_04.yaml']
-        np.random.shuffle(arenas)
+        if game_ID == 'doubleTmaze':
+            #arenas = ['newdac_01.yaml']
+            arenas = ['newdac_01.yaml', 'newdac_02.yaml', 'newdac_03.yaml', 'newdac_04.yaml']
+            np.random.shuffle(arenas)
+        if game_ID == 'detour':
+            arenas = ['3-4-1.yml', '3-4-2.yml']
+            #arenas = ['3-4-1.yml', '3-4-2.yml', '3-7-2.yml', '3-9-2.yml']
+            #arenas = ['3-9-2.yml', '3-7-2.yml', '3-4-1.yml', '3-4-2.yml', '3-4-3.yml', '3-5-1.yml', '3-5-2.yml', '3-5-3.yml', '3-6-1.yml', '3-6-2.yml', '3-6-3.yml', '3-7-1.yml', '3-7-3.yml', '3-8-1.yml', '3-8-2.yml', '3-8-3.yml', '3-9-1.yml', '3-9-3.yml', '3-10-1.yml', '3-10-2.yml', '3-10-3.yml', '3-11-1.yml', '3-11-2.yml', '3-11-3.yml', '3-12-1.yml', '3-12-2.yml', '3-12-3.yml', '4-13-1.yml', '4-13-2.yml', '4-13-3.yml', '4-14-1.yml', '4-14-2.yml', '4-14-3.yml', '4-15-1.yml', '4-15-2.yml', '4-15-3.yml']
+            np.random.shuffle(arenas)
+        if game_ID == 'cylinder':
+            arenas = ['3-13-1.yml']
+            #arenas = ['3-13-1.yml', '3-13-2.yml', '3-13-3.yml']
+            #arenas = ['3-15-1.yml', '3-13-1.yml', '3-13-2.yml', '3-13-3.yml', '3-14-1.yml', '3-14-2.yml', '3-14-3.yml', '3-15-2.yml', '3-15-3.yml']
+            np.random.shuffle(arenas)
+        if game_ID == 'permanence':
+            arenas = ['8-7-1.yml', '8-7-2.yml', '8-7-3.yml']
+            #arenas = ['8-7-1.yml', '8-7-2.yml', '8-7-3.yml', '8-10-1.yml','8-10-2.yml', '8-10-3.yml']
+            #arenas = ['8-19-2.yml', '8-19-3.yml', '8-20-1.yml', '8-20-3.yml', '8-21-1.yml', '8-21-2.yml', '8-21-3.yml', '8-22-1.yml', '8-22-2.yml', '8-22-3.yml', '8-23-1.yml', '8-23-2.yml', '8-23-3.yml', '8-24-1.yml', '8-24-3.yml', '8-25-1.yml', '8-25-2.yml', '8-25-3.yml', '8-26-1.yml', '8-26-3.yml', '8-27-1.yml', '8-27-2.yml', '8-27-3.yml', '8-28-1.yml', '8-28-2.yml', '8-28-3.yml', '8-29-1.yml', '8-29-2.yml', '8-29-3.yml', '8-30-1.yml', '8-30-2.yml', '8-30-3.yml', '8-7-3.yml', '8-8-1.yml', '8-8-2.yml', '8-8-3.yml', '8-9-1.yml', '8-9-2.yml', '8-9-3.yml', '8-10-1.yml', '8-10-2.yml', '8-10-3.yml', '8-11-1.yml', '8-11-3.yml', '8-12-1.yml', '8-12-2.yml', '8-12-3.yml', '8-13-1.yml', '8-13-2.yml', '8-13-3.yml', '8-14-1.yml', '8-14-2.yml', '8-14-3.yml', '8-15-1.yml', '8-15-2.yml', '8-15-3.yml', '8-16-1.yml', '8-16-2.yml', '8-16-3.yml', '8-17-2.yml', '8-17-3.yml', '8-18-1.yml', '8-18-2.yml', '8-18-3.yml', '8-19-1.yml', '8-24-2.yml', '8-20-2.yml', '8-26-2.yml', '8-11-2.yml', '8-17-1.yml', '8-1-1.yml', '8-1-2.yml', '8-1-3.yml', '8-2-1.yml', '8-2-2.yml', '8-2-3.yml', '8-3-1.yml', '8-3-2.yml', '8-3-3.yml', '8-4-1.yml', '8-4-2.yml', '8-4-3.yml', '8-5-1.yml', '8-5-2.yml', '8-5-3.yml', '8-6-1.yml', '8-6-2.yml', '8-6-3.yml', '8-7-1.yml', '8-7-2.yml']
+            np.random.shuffle(arenas)
+        if game_ID == 'thorndike':
+            arenas = ['3-25-1.yml', '3-25-2.yml', '3-25-3.yml']
+            #arenas = ['8-7-1.yml', '8-7-2.yml', '8-7-3.yml', '8-10-1.yml','8-10-2.yml', '8-10-3.yml']
+            #arenas = ['3-27-3.yml', '3-25-1.yml', '3-25-2.yml', '3-25-3.yml', '3-26-1.yml', '3-26-2.yml', '3-26-3.yml', '3-27-1.yml', '3-27-2.yml', '3-28-1.yml', '3-28-2.yml', '3-28-3.yml', '3-29-1.yml', '3-29-2.yml', '3-29-3.yml', '3-30-1.yml', '3-30-2.yml', '3-30-3.yml']
+            np.random.shuffle(arenas)
+        if game_ID == 'elimination':
+            #arenas = ['5-4-1.yml', '5-4-2.yml', '5-4-3.yml']
+            #arenas = ['5-4-1.yml', '5-4-2.yml', '5-4-3.yml', '5-5-1.yml', '5-5-2.yml', '5-5-3.yml']
+            arenas = ['5-4-1.yml', '5-4-2.yml', '5-4-3.yml', '5-5-1.yml', '5-5-2.yml', '5-5-3.yml', '5-6-1.yml', '5-6-2.yml', '5-6-3.yml', '5-7-1.yml', '5-7-2.yml', '5-7-3.yml', '5-8-1.yml', '5-8-2.yml', '5-8-3.yml', '5-9-1.yml', '5-9-2.yml', '5-9-3.yml', '5-10-1.yml', '5-10-2.yml', '5-10-3.yml', '5-11-1.yml', '5-11-2.yml', '5-11-3.yml', '5-12-1.yml', '5-12-2.yml', '5-12-3.yml']
+            np.random.shuffle(arenas)
 
     if capsule: 
         arena_config_in = ArenaConfig('/root/capsule/code/sec/data/utilities/arenas/'+arenas[0])
@@ -111,7 +135,7 @@ def run_simulation(agent_ID, agent_model, environment, arenas_list, envPath, fil
     summary['K_neighbors'] = agent.CL.k
     summary['forgetting'] = agent.CL.forget
     summary['estimation'] = agent.CL.estimation
-    summary['frozen_ws'] = agent.PL.frozen
+    #summary['frozen_ws'] = agent.PL.frozen
 
     summary['avg_rec_err'] = 0
     summary['rec_thres'] = agent.reconstruct_thres
@@ -274,12 +298,12 @@ def run_simulation(agent_ID, agent_model, environment, arenas_list, envPath, fil
             if episodes >= max_episodes:
                 acc_mean_rec_err = np.mean(log_mean_rec_err)
                 mean_step_rew = np.mean(step_reward)
-                encoder_reliability = (agent.count_reliable / (agent.count_reliable+agent.count_unreliable)) * 100
+                #encoder_reliability = (agent.count_reliable / (agent.count_reliable+agent.count_unreliable)) * 100
                 memory_length = agent.CL.get_LTM_length()
                 print('FINAL average reconstruction error:', acc_mean_rec_err)
                 print('ACTIONS NEEDED TO REACH REWARD:', step_reward)
                 print('MEAN ACTIONS NEEDED TO REACH REWARD:', mean_step_rew)
-                print('AUTOENCODER RELIABILITY:', encoder_reliability)
+                #print('AUTOENCODER RELIABILITY:', encoder_reliability)
                 print('REACTIVE REWARDS:', reactive_wins)
                 print('CONTEXTUAL REWARDS:', contextual_wins)
                 print('TOTAL MEMORIES:', memory_length)
@@ -287,7 +311,7 @@ def run_simulation(agent_ID, agent_model, environment, arenas_list, envPath, fil
                 summary['avg_rec_err'] = acc_mean_rec_err
                 summary['wins_reactive'] = reactive_wins
                 summary['wins_contextual'] = contextual_wins
-                summary['auto_reliable'] = encoder_reliability
+                #summary['auto_reliable'] = encoder_reliability
                 summary['mean_step_rew'] = mean_step_rew
                 summary['mean_step_log'] = step_reward
                 summary['memory_length'] = memory_length

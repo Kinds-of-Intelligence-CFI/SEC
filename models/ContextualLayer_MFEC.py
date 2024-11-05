@@ -72,6 +72,10 @@ class MFEC(object):
             if state not in Q_ac[0]:
                 # first, calculate which are the closest states in memory (based on Euclidean distance btw state and memories)
                 #distances = np.sum(np.abs(state - Q_ac[0]), axis=2) / len(state)
+                #Q_ac_reshaped = np.array(Q_ac[0]).reshape(-1, 100)
+                #print("state shape", np.array(state).shape)
+                #print("Q_ac[0] shape", np.array(Q_ac[0]).shape)
+                #print("Q_ac[0][0] shape", Q_ac[0][0].shape)
                 distances = np.linalg.norm(state - np.array(Q_ac[0]), axis=1)
                 # get an index of the closest neighbors
                 #nearest_neighbor_ids = distances.argsort()[:self.k] if len(distances) > self.k else distances.argsort()

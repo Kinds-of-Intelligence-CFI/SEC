@@ -56,12 +56,12 @@ class PerceptualLayer_RP(object):
         filename = ID+'_grp'+str(self.dimensions)+'_atari_v4-test.sav'
         pickle.dump(self.model, open(filename, 'wb'))
 
-    def load_model(self):
-        file_path = os.path.abspath('./data/autoencoders/trained/random_projection_p'+str(self.dimensions)+'.sav')
+    def load_saved_model(self, gameID):
+        file_path = os.path.abspath('./data/autoencoders/'+gameID+'_random_projection_p'+str(self.dimensions)+'.sav')
 
         if os.path.exists(file_path):
             self.model = pickle.load(open(file_path, 'rb'))
-            print('FILE random_projection_p'+str(self.dimensions)+'.sav LOADED')
+            print('FILE '+gameID+' random_projection_p'+str(self.dimensions)+'.sav LOADED')
         else:
             print('FILE DOES NOT EXIST')
             print('Failed to find file on filepath: ', file_path)

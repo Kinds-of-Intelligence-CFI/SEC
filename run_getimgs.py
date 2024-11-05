@@ -29,22 +29,23 @@ if CodeOcean == True:
     print("OS IS LINUX VM CAPSULE")
 else:
     if plt == "Windows":
-        base_path = '../AnimalAI-Olympics/env-win/'
-        file_path = './data/simulations/'
+        base_path = '../AnimalAI-Olympics/env-pos/'
+        file_path = './data/'
         set_keras_backend("tensorflow")
         print("OS IS WINDOWS")
     else:
         base_path = '../AnimalAI-Olympics/env-lnx/'
-        file_path = './data/simulations/'
+        file_path = './data/'
         print("OS IS LINUX")
 
-from exp_setup_getimgs_detour import id_generator, create_env, run_simulation
+from exp_setup_getimgs import id_generator, create_env, run_simulation
 from agent_reactive import ReactiveAgent
 
 #################################################################################################################
 
 # SET HYPERPARAMETERS
 
+game = 'thorndike'     # envs = ['doubleTmaze', 'detour', 'cylinder', 'permanence', 'thorndike', 'elimination']
 experiments = 1
 episodes = 10000
 save_imgs = True
@@ -59,13 +60,13 @@ real_time_plots = False
 # MAIN function
 def run_experiment(seed, worker_id):
 
-    env, arenas = create_env(seed, worker_id, base_path, arenas_n=episodes, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
+    env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=episodes, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
 
     ID = 'ReactiveAgent-'+id_generator(6)+'_'
 
     agent = ReactiveAgent()
 
-    results = run_simulation(ID, agent, env, arenas, base_path, file_path, episodes_n=episodes, fp_view=real_time_plots, save_imgs=save_imgs, capsule=CodeOcean)
+    results = run_simulation(game, ID, agent, env, arenas, base_path, file_path, episodes_n=episodes, fp_view=real_time_plots, save_imgs=save_imgs, capsule=CodeOcean)
     print('FINAL SCORE: ', results)
     
     env.close()

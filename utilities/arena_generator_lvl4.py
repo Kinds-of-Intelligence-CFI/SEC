@@ -4,13 +4,11 @@ import os
 if os.name == 'nt': # Windows
     basePath = './utilities/arenas/'
 else:
-    basePath = './utilities/arenas/'
-
-#basePath = '/root/capsule/code/sec/utilities/arenas/'
+    basePath = '../'
 
 def create_arena(seed, number):
     arenas_list = []
-    #random.seed(seed)
+    random.seed(seed)
     start_pos = ['{x: 3, y: 0, z: 37}','{x: 37, y: 0, z: 37}','{x: 3, y: 0, z: 3}','{x: 37, y: 0, z: 3}']
     for i in range (number):
         file_name = 'random_agent_'+str(i)+'.yaml'

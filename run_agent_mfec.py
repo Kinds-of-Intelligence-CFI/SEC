@@ -47,16 +47,17 @@ from agent_mfec import Agent
 
 # SET HYPERPARAMETERS
 
-experiments = 5
+game = 'detour'         # envs = ['doubleTmaze', 'detour', 'cylinder', 'permanence']
+experiments = 2
 episodes = 5000
 docker_training = False
 environment_visible = False
 real_time_plots = False
 
 epsilon = 0.005
-discount_factor = 0.99
-k_neigbors = 50
-action_buffer = 100000  # aka LTM of each action buffer - default 100000
+discount_factor = 0.99      # default: 0.99 labyrinth / 1 atari
+k_neigbors = 50             # default: 50 labyrinth / 5-11 atari
+action_buffer = 25000      # aka LTM of each action buffer - default: 100000
 forgetting = "FIFO"
 estimation = False
 frozen_ws = True
@@ -65,7 +66,7 @@ frozen_ws = True
 epsilon_random_steps = 1250 # NatureDQN: 50K STEPS / 40 = 1250 steps (5 episodes) animalai
 # Number of agent steps for exploration
 
-embedding = 'autoencoder'
+embedding = 'random_projection'          #default: 'autoencoder', OPTIONS: 'autoencoder', 'random_projection'
 prototype_length = 20              #default: 20
 reconstruction_threshold = 0.01    #default: 0.005
 clr = 4                            #default: 4
@@ -78,11 +79,11 @@ def run_experiment(seed, worker_id):
 
     #seed = random.randint(1,100)
     #worker_id = random.randint(1,10)
-    env, arenas = create_env(seed, worker_id, base_path, arenas_n=0, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
+    env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=0, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
 
-    ID = 'cl'+str(clr)+'-kn'+str(k_neigbors)+'-ltm'+str(action_buffer)+'_agent-'+id_generator(6)+'_' 
+    ID = 'MFEC_'+str(game)+'_'+str(embedding)+'_cl'+str(clr)+'-kn'+str(k_neigbors)+'-ltm'+str(action_buffer)+'_agent-'+id_generator(6)+'_'
     agent = Agent(random_steps=epsilon_random_steps, epsilon=epsilon, discount=discount_factor, k=k_neigbors, ltm_len=action_buffer, embbeding_type=embedding, p_len=prototype_length, rec_thr=reconstruction_threshold, forget=forgetting, estimation=estimation, frozen_ws=frozen_ws, load_ltm=False)
-    agent.PL.load_model()
+    agent.PL.load_saved_model(gameID=game)
 
     results = run_simulation(ID, agent, env, arenas, base_path, file_path, episodes_n=episodes, fp_view=real_time_plots, cl_r=clr, capsule=CodeOcean)
     print('FINAL SCORE: ', results)
@@ -93,7 +94,7 @@ def run_experiment(seed, worker_id):
 
 # RUN experiment
 seed = 0
-worker_id = 0
+worker_id = 5
 
 if __name__ == '__main__':
     try:

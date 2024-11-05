@@ -8,7 +8,7 @@ if os.name == 'nt': # Windows
 else:
     basePath = '../'
     
-def create_arena(seed, number):
+def create_arena_doubletmaze(seed, number):
     arenas_list = []
     random.seed(seed)
     #print ('Arena Seed: '+str(seed))
@@ -17,7 +17,7 @@ def create_arena(seed, number):
         agent_z = random.randint(5, 35)
         agent_a = random.randint(0,359)
     
-        arena_name = 'random_dac_'+str(i)+'.yaml'
+        arena_name = 'random_doubletmaze_'+str(i)+'.yaml'
         content = '''!ArenaConfig
 arenas:
   0: !Arena

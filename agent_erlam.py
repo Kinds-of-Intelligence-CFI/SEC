@@ -16,13 +16,13 @@ import tensorflow as tf
 from keras.models import Model, load_model
 from keras.layers import Dense, Flatten, Input, MaxPooling2D
 
-sys.path.append('./models/')
+sys.path.append('./DAC/')
 from RandomReactiveLayer import ReactiveLayer as RL
 
 
 class Agent(object):
 
-    def __init__(self, input_size, output_size,
+    def __init__(self, gameID, input_size, output_size,
         random_steps, egreedy_steps, eps_max, eps_min,
         lr, gamma, lamb, batch_size, mem_size, forgetting,
         dqn_update_freq, target_update_freq, assoc_freq, threshold):
@@ -32,7 +32,7 @@ class Agent(object):
             random_steps=random_steps, egreedy_steps=egreedy_steps, eps_max=eps_max, eps_min=eps_min,
             lr= lr, gamma=gamma, lambda_=lamb,
             update_freq=dqn_update_freq, sync_freq=target_update_freq)
-        self.CL = AssociativeMemory(gamma=gamma, batch_size=batch_size, mem_size=mem_size, forgetting=forgetting, assoc_freq=assoc_freq, threshold=threshold)
+        self.CL = AssociativeMemory(gameID=gameID, gamma=gamma, batch_size=batch_size, mem_size=mem_size, forgetting=forgetting, assoc_freq=assoc_freq, threshold=threshold)
 
         self.step_count = 0
 
@@ -257,7 +257,7 @@ class GraphNode:
 Manages the memory for the rl agent
 """
 class AssociativeMemory:
-    def __init__(self, gamma=0.99, batch_size=64, mem_size=1000000, forgetting=True, assoc_freq=50, threshold=0.02):
+    def __init__(self, gameID='doubleTmaze', gamma=0.99, batch_size=64, mem_size=1000000, forgetting=True, assoc_freq=50, threshold=0.02):
 
         self.gamma = gamma
 
@@ -278,7 +278,8 @@ class AssociativeMemory:
         self.similar_states_count = 0
         self.updated_states_history = []
 
-        filename = './data/autoencoders/trained/autoencoder_p'+str(20)+'.h5'
+        #filename = './data/autoencoders/trained/autoencoder_p'+str(20)+'.h5'
+        filename = './data/autoencoders/'+gameID+'/autoencoder_p'+str(20)+'.h5'
         filepath = os.path.abspath(filename)
 
         if os.path.exists(filepath):

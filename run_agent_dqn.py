@@ -32,7 +32,8 @@ from agent_dqn import Agent
 
 # SET HYPERPARAMETERS
 
-experiments = 5
+game = 'cylinder'         # envs = ['doubleTmaze', 'detour', 'cylinder', 'permanence']
+experiments = 4
 episodes = 5000
 docker_training = False
 environment_visible = False
@@ -76,9 +77,9 @@ def run_experiment(seed, worker_id):
 
     #seed = random.randint(1,100)
     #worker_id = random.randint(1,10)
-    env, arenas = create_env(seed, worker_id, base_path, arenas_n=0, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
+    env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=0, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
 
-    ID = 'DQN_cl'+str(frameskip)+'-batch'+str(batch_size)+'-ltm'+str(memory_buffer)+'_agent-'+id_generator(6)+'_'
+    ID = 'DQN_'+str(game)+'_cl'+str(frameskip)+'-batch'+str(batch_size)+'-ltm'+str(memory_buffer)+'_agent-'+id_generator(6)+'_'
 
     agent = Agent(input_size=input_size, output_size=output_size,
         random_steps=epsilon_random_steps, egreedy_steps=epsilon_greedy_steps, eps_max=epsilon_max, eps_min=epsilon_min,
@@ -96,7 +97,7 @@ def run_experiment(seed, worker_id):
 
 # RUN experiment
 seed = 0
-worker_id = 5
+worker_id = 9
 
 if __name__ == '__main__':
     try:

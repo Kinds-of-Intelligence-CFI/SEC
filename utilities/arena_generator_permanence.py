@@ -8,34 +8,38 @@ if os.name == 'nt': # Windows
 else:
     basePath = '../'
     
-def create_arena(seed, number,):
-    save_data=False
+def create_arena_permanence(seed, number):
     arenas_list = []
-    coordinates = []
     random.seed(seed)
     #print ('Arena Seed: '+str(seed))
     for i in range (number):
-        green_x = random.randint(3, 37)
-        green_z = random.randint(3, 37)
         agent_x = random.randint(5, 35)
         agent_z = random.randint(5, 35)
         agent_a = random.randint(0,359)
-        if save_data: 
-          file_name = 'coordinates.pkl'
-          data = (green_x, green_z, agent_x, agent_z, agent_a)
-          coordinates.append(data)       
-        arena_name = 'random_food_'+str(i)+'.yaml'
+    
+        arena_name = 'random_permanence_'+str(i)+'.yaml'
         content = '''!ArenaConfig
 arenas:
   0: !Arena
-    t: 85
+    t: 250
     items:
     - !Item
-      name: GoodGoal
-      sizes:
-      - !Vector3 {x: 3, y: 1, z: 1} 
+      name: Wall
       positions:
-      - !Vector3 {x: '''+str(green_x)+''', y: 0, z: '''+str(green_z)+'''}
+      - !Vector3 {x: 10, y: 0, z: 30}
+      rotations: [0]
+      colors:
+      - !RGB {r: 153, g: 153, b: 153}
+      sizes:
+      - !Vector3 {x: 20, y: 4, z: 1}
+    - !Item
+      name: GoodGoal
+      positions:
+      - !Vector3 {x: 10, y: 10, z: 35}
+      - !Vector3 {x: 20, y: 0, z: 25}
+      sizes:
+      - !Vector3 {x: 3, y: 3, z: 3}
+      - !Vector3 {x: 1, y: 1, z: 1}
     - !Item
       name: Agent
       positions:
@@ -43,14 +47,9 @@ arenas:
       rotations: ['''+str(agent_a)+''']'''
 
         with open(basePath+arena_name,'w') as f:
-            f.write(content)   
+            f.write(content)            
         #print (content)
         arenas_list.append(arena_name)
-    if save_data:
-      with open(basePath+file_name,'wb') as f:
-        pkl.dump(coordinates, f)
-        print ('DATA SAVED SUCCESFULLY!')
-        #print (coordinates)
     #print (arenas_list)
     return arenas_list
 

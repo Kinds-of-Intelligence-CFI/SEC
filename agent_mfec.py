@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
-sys.path.append('./models/')
+sys.path.append('./DAC/')
 #sys.path.insert(0, "/root/capsule/code/sec/models/")
 from RandomReactiveLayer import ReactiveLayer as RL
 from PerceptualLayer import PerceptualLayer as PerceptualLayer_AE
@@ -18,10 +18,11 @@ class Agent(object):
         self.embbeding_type = embbeding_type
         if self.embbeding_type == 'autoencoder':
             print('ADAPTIVE LAYER AS AN AUTOENCODER')
-            self.PL = PerceptualLayer_AE(prototype_length=p_len, frozen_weights=frozen_ws)
+            #self.PL = PerceptualLayer_AE(prototype_length=p_len, frozen_weights=frozen_ws)
+            self.PL = PerceptualLayer_AE(prototype_length=p_len)
         if self.embbeding_type == 'random_projection':
             print('ADAPTIVE LAYER AS A RANDOM PROJECTION')
-            self.PL = PerceptualLayer_RP(img_shape=(84,84,3), autoencoder=self.embbeding_type, prototype_length=64, frozen_weights=frozen_ws)
+            self.PL = PerceptualLayer_RP(img_shape=(84,84,3), autoencoder=self.embbeding_type, prototype_length=p_len, frozen_weights=frozen_ws)
 
         self.CL = MFEC(discount=discount, k=k, ltm=ltm_len, pl=p_len, forget=forget, estimation=estimation, load_ltm=load_ltm)
         #self.CL = CL(stm=stm_len, ltm=ltm_len, pl=p_len, load_ltm=False, decision_inertia=d_ine, forget=forget)

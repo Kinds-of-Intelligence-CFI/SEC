@@ -32,6 +32,7 @@ from agent_erlam import Agent
 
 # SET HYPERPARAMETERS
 
+game = 'detour'         # envs = ['doubleTmaze', 'detour', 'cylinder', 'permanence']
 experiments = 5
 episodes = 5000
 docker_training = False
@@ -79,11 +80,11 @@ def run_experiment(seed, worker_id):
 
     #seed = random.randint(1,100)
     #worker_id = random.randint(1,10)
-    env, arenas = create_env(seed, worker_id, base_path, arenas_n=0, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
+    env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=0, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
 
-    ID = 'ERLAM_cl'+str(frameskip)+'-k'+str(assoc_freq)+'-ltm'+str(memory_buffer)+'_agent-'+id_generator(6)+'_'
+    ID = 'ERLAM_'+str(game)+'_cl'+str(frameskip)+'-k'+str(assoc_freq)+'-ltm'+str(memory_buffer)+'_agent-'+id_generator(6)+'_'
 
-    agent = Agent(input_size=input_size, output_size=output_size,
+    agent = Agent(gameID=game, input_size=input_size, output_size=output_size,
         random_steps=epsilon_random_steps, egreedy_steps=epsilon_greedy_steps, eps_max=epsilon_max, eps_min=epsilon_min,
         lr=learning_rate, gamma=gamma, lamb=lambda_,
         batch_size=batch_size, mem_size=memory_buffer, forgetting=forgetting,
@@ -100,7 +101,7 @@ def run_experiment(seed, worker_id):
 
 # RUN experiment
 seed = 0
-worker_id = 0
+worker_id = 5
 
 if __name__ == '__main__':
     try:

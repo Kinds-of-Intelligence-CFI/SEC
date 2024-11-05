@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-sys.path.append('./models/')
+sys.path.append('./DAC/')
 from RandomReactiveLayer import ReactiveLayer as RL
 
 
