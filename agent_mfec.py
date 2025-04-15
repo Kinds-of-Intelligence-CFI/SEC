@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import sys
 
 sys.path.append('./DAC/')
+sys.path.append('./models/')
 #sys.path.insert(0, "/root/capsule/code/sec/models/")
 from RandomReactiveLayer import ReactiveLayer as RL
 from PerceptualLayer import PerceptualLayer as PerceptualLayer_AE

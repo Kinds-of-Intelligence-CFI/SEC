@@ -11,6 +11,7 @@ from keras.models import Model, load_model
 from keras.layers import Dense, Flatten, Input, MaxPooling2D
 
 sys.path.append('./DAC/')
+sys.path.append('./models/')
 from RandomReactiveLayer import ReactiveLayer as RL
 
 

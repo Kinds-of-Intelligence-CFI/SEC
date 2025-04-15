@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 sys.path.append('./DAC/')
+sys.path.append('./models/')
 from RandomReactiveLayer import ReactiveLayer as RL
 from PerceptualLayer import PerceptualLayer as PL
 from ContextualLayer import ContextualLayer as CL
@@ -13,7 +14,7 @@ class ContextualAgent(object):
         self.RL = RL()
         self.PL = PL(prototype_length=p_len)
         self.CL = CL(stm=stm_len, ltm=ltm_len, pl=p_len, load_ltm=False, decision_inertia=d_ine, forget=forget, value_function=value_function)
-        self.previous_couplet = np.array([np.zeros(p_len), np.zeros(2)])
+        self.previous_couplet = [np.zeros(p_len), np.zeros(2)]
         self.previous_speed = np.zeros(3)
         self.reconstruct_thres = rec_thr # default 0.01 (originally 0.001)  --  best loss achieved 0.0024
         self.layer_chosen = 'R' #Reactive Layer default selection
@@ -33,8 +34,8 @@ class ContextualAgent(object):
         # Update Perceptual layer and obtain current prototype
         prototype = self.PL.get_prototype(obs)
         #print ('Current Protoype ', prototype) # length = 20 
-        print("state ", type(prototype))
-        print("state ", prototype.shape) # proportional to sequence's length, n = LTM sequences
+        #print("state ", type(prototype))
+        #print("state ", prototype.shape) # proportional to sequence's length, n = LTM sequences
 
         # Verify the quality of the current generated prototype
         # NOTE!!!: reconstruct_error is updated outside (at episodic_chamber.py LINE 131) at every step
