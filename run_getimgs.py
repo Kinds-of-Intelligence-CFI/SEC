@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import platform
-from keras import backend as K
+from tensorflow.python.keras import backend as K
 import os
 import tensorflow as tf
 
@@ -12,11 +12,11 @@ def set_keras_backend(backend):
         reload(K)
         assert K.backend() == backend
 
-    config = tf.ConfigProto()
-    jit_level = tf.OptimizerOptions.ON_1
+    config = tf.compat.v1.ConfigProto()
+    jit_level = tf.compat.v1.OptimizerOptions.ON_1
     config.graph_options.optimizer_options.global_jit_level = jit_level
-    sess = tf.Session(config=config)
-    tf.keras.backend.set_session(sess)
+    sess = tf.compat.v1.Session(config=config)
+    K.set_session(sess)
 
 plt = platform.system()
 np.seterr(divide = 'ignore')
