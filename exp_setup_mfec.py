@@ -11,25 +11,19 @@ sys.path.append('../AnimalAI-Olympics/animalai/')
 
 from matplotlib.animation import FuncAnimation
 from keras.models import Model
-from animalai.envs import UnityEnvironment
-from animalai.envs.arena_config import ArenaConfig
+from mlagents_envs.envs.unity_gym_env import UnityToGymWrapper
+
+from animalai.environment import AnimalAIEnvironment, UnityEnvironment
+from animalai.actions import AAIActions
 
 
 def id_generator(length=8, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for i in range(length))
 
 def create_env(seed, work_id, basePath, game_ID='doubleTmaze', arenas_n=10, docker=True, env_view=True, save_data=False, capsule=True):
-    env = UnityEnvironment(
-        file_name=basePath+'AnimalAI',  # Path to the environment
-        #worker_id=np.random.randint(1,10),  # Unique ID for running the environment (used for connection)
-        worker_id=work_id,  # Unique ID for running the environment (used for connection)
-        seed=seed,  # The random seed
-        docker_training=docker,  # Whether or not you are training inside a docker
-        n_arenas=1,  # Number of arenas in your environment
-        play=False,  # Set to False for training
-        inference=env_view,  # Set to true to watch your agent in action
-        resolution=None  # Int: resolution of the agent's square camera (in [4,512], default 84)
-    )
+
+    timescale = 5
+    target_framerate = -1
 
     if arenas_n > 0:
         arenas = create_arena(seed, arenas_n)
@@ -65,14 +59,28 @@ def create_env(seed, work_id, basePath, game_ID='doubleTmaze', arenas_n=10, dock
             np.random.shuffle(arenas)
 
     if capsule: 
-        arena_config_in = ArenaConfig('/root/capsule/code/sec/data/utilities/arenas/'+arenas[0])
+        arena_config_in = '/root/capsule/code/sec/data/utilities/arenas/'+arenas[0]
     else:
-        arena_config_in = ArenaConfig('./utilities/arenas/'+arenas[0])
-    print("GENERATING ENVIRONMENT...")
+        arena_config_in = './utilities/arenas/'+arenas[0]
 
-    env.reset(arenas_configurations=arena_config_in,
+    print("GENERATING ENVIRONMENT...")
+    print("ARENA: ", arena_config_in)
+
+    aai_env = AnimalAIEnvironment(
+        file_name=basePath,  # Path to the environment
+        arenas_configurations=arena_config_in,  # need to supply one to start with 
+        worker_id=work_id,  # Unique ID for running the environment (used for connection)
+        seed=seed,  # The random seed
+        play=False,  # Set to False for training
+        inference=env_view,  # Set to true to watch your agent in action
+        resolution=84,  # Int: resolution of the agent's square camera (in [4,512], default 84)
+        timescale=timescale,
+        targetFrameRate=target_framerate,
+        log_folder="./logs/",
+    )
+    env = UnityToGymWrapper(aai_env, uint8_visual=True, allow_multiple_obs=False, flatten_branched=True)
+    aai_env.reset(arenas_configurations=arena_config_in,
               # A new ArenaConfig to use for reset, leave empty to use the last one provided
-              train_mode=True  # True for training
               )
 
     return env, arenas
@@ -145,7 +153,7 @@ def run_simulation(agent_ID, agent_model, environment, arenas_list, envPath, fil
     summary['wins_contextual'] = 0
     summary['auto_reliable'] = 0
 
-    info_dict = env.step(vector_action=[0,0])
+    obs, rew, done, info = env.step(0)
     simulation = True
 
     optionA = True
@@ -209,15 +217,19 @@ def run_simulation(agent_ID, agent_model, environment, arenas_list, envPath, fil
         if step_number%(CL_ratio*5) == 0: FIG_view = True
         else: FIG_view = False
 
+        # need to reset the environemnt if done
+        if done:
+            obs = env.reset()
+
         # GET ENV INFORMATION
-        agent_info = info_dict["Learner"]
+        agent_info = info
         #print(agent_info.__dict__.keys())
-        visual_obs = agent_info.visual_observations[0]
+        visual_obs = obs
         #speed_obs = agent_info.vector_observations[0]
         speed_obs = 0
-        agent_done = agent_info.local_done[0]
-        reward = agent_info.rewards[0]
-        penalty += agent_info.rewards[0]
+        agent_done = done
+        reward = rew
+        penalty += rew
         #print ("agent info", agent_info)
         #print ("rewards info", agent_info.rewards[0])
 
@@ -260,7 +272,7 @@ def run_simulation(agent_ID, agent_model, environment, arenas_list, envPath, fil
         log_action.append(action)
 
         #UPDATE ENVIRONMENT WITH AGENT'S ACTION
-        info_dict = env.step(vector_action=action)
+        obs, rew, done, info = env.step((action[0]*3)+action[1])
         step_number += 1
 
         # END OF EPISODE
@@ -328,13 +340,16 @@ def run_simulation(agent_ID, agent_model, environment, arenas_list, envPath, fil
             if simulation:
                 if len(arenas) > 1: 
                     if capsule: 
-                        arena_config_in = ArenaConfig('/root/capsule/code/sec/data/utilities/arenas/'+arenas[episodes%len(arenas)])
+                        arena_config_in = '/root/capsule/code/sec/data/utilities/arenas/'+arenas[episodes%len(arenas)]
                     else:
-                        arena_config_in = ArenaConfig('./utilities/arenas/'+arenas[episodes%len(arenas)])
-                    env.reset(arenas_configurations=arena_config_in, train_mode=True)
+                        arena_config_in = './utilities/arenas/'+arenas[episodes%len(arenas)]
+                    env._env.reset(arenas_configurations=arena_config_in)
                 else:
                     env.reset()
-                info_dict = env.step(vector_action=[0, 0])
+                # need to reset the environemnt if done
+                if done:
+                    obs = env.reset()
+                obs, rew, done, info = env.step(0)
 
         if agent_view and FIG_view:
             if optionA:
