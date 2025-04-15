@@ -4,3 +4,5 @@
 **/data
 **/results
 **/arenas
+/venv
+/logs
