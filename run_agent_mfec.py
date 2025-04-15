@@ -29,7 +29,7 @@ if CodeOcean == True:
     print("OS IS LINUX VM CAPSULE")
 else:
     if plt == "Windows":
-        base_path = '../AnimalAI-Olympics/env-win/'
+        base_path = r"C:\AnimalAI\4.2.0\Animal-AI.exe"
         file_path = './data/simulations/'
         set_keras_backend("tensorflow")
         print("OS IS WINDOWS")
@@ -79,7 +79,7 @@ def run_experiment(seed, worker_id):
 
     #seed = random.randint(1,100)
     #worker_id = random.randint(1,10)
-    env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=0, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
+    env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=10, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
 
     ID = 'MFEC_'+str(game)+'_'+str(embedding)+'_cl'+str(clr)+'-kn'+str(k_neigbors)+'-ltm'+str(action_buffer)+'_agent-'+id_generator(6)+'_'
     agent = Agent(random_steps=epsilon_random_steps, epsilon=epsilon, discount=discount_factor, k=k_neigbors, ltm_len=action_buffer, embbeding_type=embedding, p_len=prototype_length, rec_thr=reconstruction_threshold, forget=forgetting, estimation=estimation, frozen_ws=frozen_ws, load_ltm=False)

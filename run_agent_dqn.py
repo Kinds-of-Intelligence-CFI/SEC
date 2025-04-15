@@ -15,7 +15,7 @@ if CodeOcean == True:
     print("OS IS LINUX VM CAPSULE")
 else:
     if plt == "Windows":
-        base_path = '../AnimalAI-Olympics/env-win/'
+        base_path = r"C:\AnimalAI\4.2.0\Animal-AI.exe"
         file_path = './data/simulations/'
         print("OS IS WINDOWS")
     else:
@@ -77,7 +77,7 @@ def run_experiment(seed, worker_id):
 
     #seed = random.randint(1,100)
     #worker_id = random.randint(1,10)
-    env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=0, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
+    env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=10, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
 
     ID = 'DQN_'+str(game)+'_cl'+str(frameskip)+'-batch'+str(batch_size)+'-ltm'+str(memory_buffer)+'_agent-'+id_generator(6)+'_'
 

@@ -22,7 +22,7 @@ plt = platform.system()
 np.seterr(divide = 'ignore')
 
 if plt == "Windows":
-    base_path = '../AnimalAI-Olympics/env-pos/'
+    base_path = r"C:\AnimalAI\4.2.0\Animal-AI.exe"
     file_path = './data/simulations/'
     set_keras_backend("tensorflow")
     print("OS IS WINDOWS")
@@ -75,7 +75,7 @@ def run_experiment(worker_id, dac, episodes, clr, stm):
     seed = random.randint(1,100)
     #worker_id = random.randint(1,10)
     worker_id = random.randint(1,10)
-    env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=0, env_view=environment_visible)
+    env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=10, env_view=environment_visible)
 
     ID = 'SEC_'+str(game)+'_cl'+str(clr)+'-stm'+str(stm)+'-ltm'+str(ltm)+'_agent-'+id_generator(6)+'_' if dac == True else 'reactive_agent-'+id_generator(6)
     agent = ContextualAgent(stm_len=stm, ltm_len=ltm, p_len=prototype_length, rec_thr=reconstruction_threshold, d_ine=decision_intertia, forget=forgetting, value_function=value_function) if dac == True else ReactiveAgent()

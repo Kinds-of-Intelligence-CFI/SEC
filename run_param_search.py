@@ -76,7 +76,7 @@ def run_experiment(dac, episodes, clr, stm, ltm):
 
     seed = random.randint(1,100)
     worker_id = random.randint(1,10)
-    env, arenas = create_env(seed, worker_id, base_path, arenas_n=0, env_view=environment_visible)
+    env, arenas = create_env(seed, worker_id, base_path, arenas_n=10, env_view=environment_visible)
 
     ID = 'cl'+str(clr)+'-stm'+str(stm)+'-ltm'+str(ltm)+'_agent-'+id_generator(6)+'_' if dac == True else 'reactive_agent-'+id_generator(6)
     agent = Agent(stm_len=stm, ltm_len=ltm, p_len=prototype_length, rec_thr=reconstruction_threshold, d_ine=decision_intertia, forget=forgetting) if dac == True else ReactiveAgent(p_len=prototype_length, rec_thr=reconstruction_threshold)

@@ -29,7 +29,7 @@ if CodeOcean == True:
     print("OS IS LINUX VM CAPSULE")
 else:
     if plt == "Windows":
-        base_path = '../AnimalAI-Olympics/env-pos/'
+        base_path = r"C:\AnimalAI\4.2.0\Animal-AI.exe"
         file_path = './data/'
         set_keras_backend("tensorflow")
         print("OS IS WINDOWS")
@@ -45,7 +45,7 @@ from agent_reactive import ReactiveAgent
 
 # SET HYPERPARAMETERS
 
-game = 'thorndike'     # envs = ['doubleTmaze', 'detour', 'cylinder', 'permanence', 'thorndike', 'elimination']
+game = 'detour'     # envs = ['doubleTmaze', 'detour', 'cylinder', 'permanence', 'thorndike', 'elimination']
 experiments = 1
 episodes = 10000
 save_imgs = True
