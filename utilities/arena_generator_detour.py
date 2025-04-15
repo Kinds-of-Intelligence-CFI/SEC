@@ -21,7 +21,8 @@ def create_arena_detour(seed, number):
         content = '''!ArenaConfig
 arenas:
   0: !Arena
-    t: 250
+    timeLimit: 250
+    passMark: 0
     items:
     - !Item
       name: Wall
@@ -33,8 +34,8 @@ arenas:
       - !Vector3 {x: 35, y: .5, z: 1}
       - !Vector3 {x: 1, y: .5, z: 2.5}
       colors:
-      - !Vector3 {x: 153, y: 153, z: 153}
-      - !Vector3 {x: 153, y: 153, z: 153}
+      - !RGB {r: 153, g: 153, b: 153}
+      - !RGB {r: 153, g: 153, b: 153}
     - !Item
       name: GoodGoal
       positions:

@@ -21,7 +21,8 @@ def create_arena_thorndike(seed, number):
         content = '''!ArenaConfig
 arenas:
   0: !Arena
-    t: 250
+    timeLimit: 250
+    passMark: 0
     items:
     - !Item
       name: Wall

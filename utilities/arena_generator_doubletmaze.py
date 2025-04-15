@@ -21,7 +21,8 @@ def create_arena_doubletmaze(seed, number):
         content = '''!ArenaConfig
 arenas:
   0: !Arena
-    t: 1000
+    timeLimit: 1000
+    passMark: 0
     items:     
     - !Item # blue square top midl
       name: Wall 

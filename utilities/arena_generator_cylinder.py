@@ -21,7 +21,8 @@ def create_arena_cylinder(seed, number):
         content = '''!ArenaConfig
 arenas:
   0: !Arena
-    t: 250
+    timeLimit: 250
+    passMark: 0
     items:
     - !Item
       name: CylinderTunnel
@@ -31,7 +32,7 @@ arenas:
       sizes:
       - !Vector3 {x: 10, y: 10, z: 10}
       colors:
-      - !Vector3 {x: 153, y: 153, z: 153}
+      - !RGB {r: 153, g: 153, b: 153}
     - !Item
       name: GoodGoal
       positions:

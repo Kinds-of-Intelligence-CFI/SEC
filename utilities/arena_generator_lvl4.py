@@ -15,7 +15,8 @@ def create_arena(seed, number):
         content = '''!ArenaConfig
 arenas:
   0: !Arena
-    t: 1000
+    timeLimit: 1000
+    passMark: 0
     items:     
     - !Item # blue square top midl
       name: Wall 
@@ -161,7 +162,7 @@ arenas:
             f.write(content)
         #print (content)
         arenas_list.append(file_name)
-    #print (arenas_list)
+    print (arenas_list)
     return arenas_list
     
 #create_arena(random.randint(10000),3)
