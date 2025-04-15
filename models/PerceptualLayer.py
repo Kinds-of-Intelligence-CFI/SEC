@@ -14,7 +14,7 @@ class Conv_Autoencoder():
         self.encoder = 0
         self.decoder = 0
         self.pl = pl
-        optimizer = RMSprop(lr=0.001) #before 0.001
+        optimizer = RMSprop(learning_rate=0.001) #before 0.001
         self.autoencoder = self.build_model()
         self.autoencoder.compile(loss='mse', optimizer=optimizer)
         self.autoencoder.summary()
@@ -56,11 +56,17 @@ class Conv_Autoencoder():
         return autoencoder
 
     def update(self, img, batch_size):
-        reconstruct_error = self.autoencoder.fit(img, img, epochs=1, batch_size=batch_size, verbose=0).history['loss'][-1]
+        #print(f"img shape: {img.shape}")
+        img_batch = np.expand_dims(img, axis=0)
+        reconstruct_error = self.autoencoder.fit(img_batch, img_batch, epochs=1, batch_size=batch_size, verbose=0).history['loss'][-1]
         return reconstruct_error
 
     def encode(self, img):
-        prototype = self.encoder.predict([img])[0]
+        #print(f"imge shape: {img.shape}")
+        #print(f"expected shape: {self.img_shape}")
+        #print(f"mdoel summary: {self.encoder.summary()}")
+        img_batch = np.expand_dims(img, axis=0)
+        prototype = self.encoder.predict([img_batch])[0]
         return prototype
 
     def decode(self, prototype):
