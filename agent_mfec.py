@@ -29,7 +29,7 @@ class Agent(object):
         #self.CL = CL(stm=stm_len, ltm=ltm_len, pl=p_len, load_ltm=False, decision_inertia=d_ine, forget=forget)
 
         self.layer_chosen = 'R' #Reactive Layer default selection
-        self.previous_couplet = np.array([np.zeros(p_len), 0]).tolist()
+        self.previous_couplet = [np.zeros(p_len), 0]
 
         self.action_space = [3, 3]
         self.episode_buffer = []
