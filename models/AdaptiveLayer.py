@@ -58,15 +58,15 @@ class Conv_Autoencoder():
         return reconstruct_error
 
     def encode(self, img):
-        prototype = self.encoder.predict([img])[0]
+        prototype = self.encoder([img])[0]
         return prototype
 
     def decode(self, prototype):
-        img = self.decoder.predict([[prototype]])[0]
+        img = self.decoder([[prototype]])[0]
         return img
 
     def reconstruct_img(self, img):
-        reconstructed_img = self.autoencoder.predict([img])[0]
+        reconstructed_img = self.autoencoder([img])[0]
         return reconstructed_img
 
 # Feedforward network acting as CRB, predicting next sensory state from actual (state,action) couplets.

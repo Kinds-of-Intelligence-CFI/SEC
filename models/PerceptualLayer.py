@@ -66,15 +66,15 @@ class Conv_Autoencoder():
         #print(f"expected shape: {self.img_shape}")
         #print(f"mdoel summary: {self.encoder.summary()}")
         img_batch = np.expand_dims(img, axis=0)
-        prototype = self.encoder.predict([img_batch])[0]
+        prototype = self.encoder(img_batch)[0]
         return prototype
 
     def decode(self, prototype):
-        img = self.decoder.predict([[prototype]])[0]
+        img = self.decoder([[prototype]])[0]
         return img
 
     def reconstruct_img(self, img):
-        reconstructed_img = self.autoencoder.predict([img])[0]
+        reconstructed_img = self.autoencoder([img])[0]
         return reconstructed_img
 
 class PerceptualLayer(object):

@@ -297,8 +297,7 @@ class AssociativeMemory:
 
     #Takes a state and embeds it
     def embed(self, state):
-        #prototype = self.encoder.predict([img])[0]
-        return self.phi.predict(state, verbose=0)[0]
+        return self.phi(state, verbose=0)[0]
 
     #Add the state, action, reward, next_state and done to the current episode memory
     def add_exp(self, state, action, reward, next_state, done):
