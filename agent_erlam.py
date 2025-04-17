@@ -284,10 +284,13 @@ class AssociativeMemory:
         filepath = os.path.abspath(filename)
 
         if os.path.exists(filepath):
-            AE = load_model(filename)
+            from keras.src.legacy.saving import legacy_h5_format
+
+            AE = legacy_h5_format.load_model_from_hdf5(filepath, custom_objects={'mse': 'mse'})
+            #AE = load_model(filename)
             print('FILE '+str(filename)+' LOADED')
             #AE.summary()
-            layer = AE.get_layer('dense_1')
+            layer = AE.get_layer('dense_4')
             self.phi = Model(inputs=AE.inputs, outputs=layer.output)
         else:
             print('FILE DOES NOT EXIST')
@@ -297,7 +300,9 @@ class AssociativeMemory:
 
     #Takes a state and embeds it
     def embed(self, state):
-        return self.phi(state, verbose=0)[0]
+        if len(state.shape) == 3:
+            state = np.expand_dims(state, axis=0)
+        return self.phi(state)[0]
 
     #Add the state, action, reward, next_state and done to the current episode memory
     def add_exp(self, state, action, reward, next_state, done):
@@ -342,7 +347,7 @@ class AssociativeMemory:
             #print('embedding shape: ', embedding.shape)
 
             #key = hash(tuple([int(x) for x in embedding]))
-            key = hash(embedding.tobytes())
+            key = hash(embedding.numpy().tobytes())
             #key = hash(tuple([round(x, 2) for x in embedding]))
             #key = hash(tuple([x for x in embedding]))
             #print('KEY: ', key)
@@ -444,6 +449,8 @@ class AssociativeMemory:
         mem_arr = list(self.memory.values())
 
         for i in indices:
+            if len(mem_arr[i].state.shape) == 3:
+                mem_arr[i].state = np.expand_dims(mem_arr[i].state, axis=0)
             state_mem.append(mem_arr[i].state)
             action_mem.append(mem_arr[i].action)
             reward_mem.append(mem_arr[i].reward)
