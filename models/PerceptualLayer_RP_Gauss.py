@@ -30,8 +30,10 @@ class PerceptualLayer_RP(object):
         return prototype
 
     def get_prototype(self, img):
+        img_batch = np.expand_dims(img, axis=0)
+        self.learn_protoype(img_batch)
         #print('img shape', img.shape)
-        sample = img.reshape((1,img.shape[1]*img.shape[2]*img.shape[3]))
+        sample = img_batch.reshape((1,img_batch.shape[1]*img_batch.shape[2]*img_batch.shape[3]))
         #sample = img.reshape((1,img.shape[0]*img.shape[1]*img.shape[2]))
         #print('sample shape', sample.shape)
         prototype = self.model.transform(sample)[0]
