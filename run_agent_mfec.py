@@ -34,7 +34,7 @@ else:
         set_keras_backend("tensorflow")
         print("OS IS WINDOWS")
     else:
-        base_path = '../AnimalAI-Olympics/env-lnx/'
+        base_path = '../AnimalAI/4.2.0/AAI.x86_64'
         file_path = './data/simulations/'
         print("OS IS LINUX")
 
@@ -66,7 +66,7 @@ frozen_ws = True
 epsilon_random_steps = 1250 # NatureDQN: 50K STEPS / 40 = 1250 steps (5 episodes) animalai
 # Number of agent steps for exploration
 
-embedding = 'random_projection'          #default: 'autoencoder', OPTIONS: 'autoencoder', 'random_projection'
+embedding = 'autoencoder'          #default: 'autoencoder', OPTIONS: 'autoencoder', 'random_projection'
 prototype_length = 20              #default: 20
 reconstruction_threshold = 0.01    #default: 0.005
 clr = 4                            #default: 4

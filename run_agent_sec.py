@@ -27,7 +27,7 @@ if plt == "Windows":
     set_keras_backend("tensorflow")
     print("OS IS WINDOWS")
 else:
-    base_path = '../AnimalAI-Olympics/env-lnx/'
+    base_path = '../AnimalAI/4.2.0/AAI.x86_64'
     file_path = './data/simulations/'
     print("OS IS LINUX")
 
@@ -42,7 +42,7 @@ from agent_sec import ContextualAgent
 
 # SET HYPERPARAMETERS
 
-game = 'thorndike'         # envs = ['doubleTmaze', 'detour', 'cylinder', 'permanence', 'thorndike', 'elimination']
+game = 'detour'         # envs = ['doubleTmaze', 'detour', 'cylinder', 'permanence', 'thorndike', 'elimination']
 experiments = 5
 episodes = 5000
 environment_visible = False

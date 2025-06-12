@@ -19,7 +19,7 @@ else:
         file_path = './data/simulations/'
         print("OS IS WINDOWS")
     else:
-        base_path = '../AnimalAI-Olympics/env-lnx/'
+        base_path = '../AnimalAI/4.2.0/AAI.x86_64'
         file_path = './data/simulations/'
         print("OS IS LINUX")
 
