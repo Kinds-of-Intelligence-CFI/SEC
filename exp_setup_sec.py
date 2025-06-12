@@ -305,17 +305,18 @@ def run_simulation(agent_ID, agent_model, environment, arenas_list, envPath, fil
                 print('AUTOENCODER RELIABILITY:', encoder_reliability)
                 print('REACTIVE REWARDS:', reactive_wins)
                 print('CONTEXTUAL REWARDS:', contextual_wins)
-                summary['total_reward'] = acc_reward
-                summary['avg_rec_err'] = acc_mean_rec_err
-                summary['wins_reactive'] = reactive_wins
-                summary['wins_contextual'] = contextual_wins
-                summary['auto_reliable'] = encoder_reliability
-                summary['mean_step_rew'] = mean_step_rew
-                summary['mean_step_log'] = step_reward
+                summary['total_reward'] = str(acc_reward)
+                summary['avg_rec_err'] = str(acc_mean_rec_err)
+                summary['wins_reactive'] = str(reactive_wins)
+                summary['wins_contextual'] = str(contextual_wins)
+                summary['auto_reliable'] = str(encoder_reliability)
+                summary['mean_step_rew'] = str(mean_step_rew)
+                summary['mean_step_log'] = str(step_reward)
 
                 save_summary(savePath, ID, summary)
-                #agent.PL.save_model(ID)
-                #agent.CL.save_LTM(ID)
+                print(f"save model to {savePath}")
+                agent.PL.save_model(savePath, ID)
+                agent.CL.save_LTM(savePath, ID)
 
                 #print('FILES SAVED')
                 print ('Simulation completed!')
