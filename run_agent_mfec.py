@@ -74,12 +74,11 @@ clr = 4                            #default: 4
 #################################################################################################################
 
 # MAIN function
-def run_experiment(seed, worker_id):
+def run_experiment(env, arenas):
     print('Testing MFEC Agent with CL_actfreq '+str(clr)+' and LTM_length '+str(action_buffer))
 
     #seed = random.randint(1,100)
     #worker_id = random.randint(1,10)
-    env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=10, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
 
     ID = 'MFEC_'+str(game)+'_'+str(embedding)+'_cl'+str(clr)+'-kn'+str(k_neigbors)+'-ltm'+str(action_buffer)+'_agent-'+id_generator(6)+'_'
     agent = Agent(random_steps=epsilon_random_steps, epsilon=epsilon, discount=discount_factor, k=k_neigbors, ltm_len=action_buffer, embbeding_type=embedding, p_len=prototype_length, rec_thr=reconstruction_threshold, forget=forgetting, estimation=estimation, frozen_ws=frozen_ws, load_ltm=False)
@@ -102,6 +101,9 @@ if __name__ == '__main__':
             seed += 1
             worker_id += 1
             print('EXPERIMENT NUMBER ', i)
-            run_experiment(seed, worker_id)
+            env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=10, docker=docker_training, env_view=environment_visible, capsule=CodeOcean)
+            run_experiment(env, arenas)
     except KeyboardInterrupt:
         print ('Simulation interrumpted!')
+    finally:
+        env.close()

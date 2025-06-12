@@ -68,14 +68,11 @@ reconstruction_threshold = 0.01    #default 0.005
 #################################################################################################################
 
 # MAIN function
-def run_experiment(worker_id, dac, episodes, clr, stm):
+def run_experiment(dac, episodes, clr, stm, env, arenas):
     print('Testing DAC Agent with CL_actfreq '+str(clr)+' and STM_length '+str(stm)) if dac == True else print('Testing Reactive Agent...')
     #reward = test_agent(seed, worker_id, base_path, dac=dac, episodes=episodes, clr=clr, stm=stm)
 
-    seed = random.randint(1,100)
-    #worker_id = random.randint(1,10)
-    worker_id = random.randint(1,10)
-    env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=10, env_view=environment_visible)
+    
 
     ID = 'SEC_'+str(game)+'_cl'+str(clr)+'-stm'+str(stm)+'-ltm'+str(ltm)+'_agent-'+id_generator(6)+'_' if dac == True else 'reactive_agent-'+id_generator(6)
     agent = ContextualAgent(stm_len=stm, ltm_len=ltm, p_len=prototype_length, rec_thr=reconstruction_threshold, d_ine=decision_intertia, forget=forgetting, value_function=value_function) if dac == True else ReactiveAgent()
@@ -95,7 +92,14 @@ if __name__ == '__main__':
     try:
         for i in range(experiments):
             print('EXPERIMENT NUMBER ', i)
-            run_experiment(worker_id=worker_id, dac=dac, episodes=episodes, clr=clr, stm=stm)
+            
+            seed = random.randint(1,100)
+            #worker_id = random.randint(1,10)
+            worker_id = random.randint(1,10)
+            env, arenas = create_env(seed, worker_id, base_path, game, arenas_n=10, env_view=environment_visible)
+            run_experiment(dac=dac, episodes=episodes, clr=clr, stm=stm, env=env, arenas=arenas)
             worker_id += 1
     except KeyboardInterrupt:
         print ('Simulation interrumpted!')
+    finally:
+        env.close()
