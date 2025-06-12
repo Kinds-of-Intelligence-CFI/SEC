@@ -63,7 +63,11 @@ class MFEC(object):
         # 1. Check if its a new state
         # 2. If it is: Get the k nearest states
         # 3. Calculate the q estimate by averaging the value of the k nearest states
-        state = prototype.tolist()
+        if isinstance(prototype, np.ndarray):
+            # Convert to list if it's a numpy array
+            state = prototype.tolist()
+        else:
+            state = prototype.numpy().tolist()
         Q_s = []
         q = -10
 
@@ -112,7 +116,11 @@ class MFEC(object):
         ndarray: the updated action-value function Q_EC of shape (n_states, n_qvalues)
 
         """
-        state = prototype.tolist()
+        if isinstance(prototype, np.ndarray):
+            # Convert to list if it's a numpy array
+            state = prototype.tolist()
+        else:
+            state = prototype.numpy().tolist()
         #print("action: ", action)
 
         for i, Q_ac in enumerate(self.Q_EC):
