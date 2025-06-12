@@ -14,9 +14,9 @@ class Conv_Autoencoder():
         self.encoder = 0
         self.decoder = 0
         self.pl
-        optimizer = Adam(lr=0.01) #before 0.001
+        self.optimizer = Adam(lr=0.01) #before 0.001
         self.autoencoder = self.build_model()
-        self.autoencoder.compile(loss='mse', optimizer=optimizer)
+        self.autoencoder.compile(loss='mse', optimizer=self.optimizer)
         self.autoencoder.summary()
 
     def build_model(self):
@@ -157,10 +157,22 @@ class AdaptiveLayer(object):
         file_path = os.path.abspath('./data/autoencoders/'+gameID+'/autoencoder_p'+str(self.pl)+'.h5')
 
         if os.path.exists(file_path):
-            self.visual.autoencoder = load_model(file_path)
+            from keras.src.legacy.saving import legacy_h5_format
+
+            AE = legacy_h5_format.load_model_from_hdf5(file_path, custom_objects={'mse': 'mse'})
+
+            layer = AE.get_layer('dense_4')
+            self.visual.encoder = Model(inputs=AE.inputs, outputs=layer.output)
+            self.visual.decoder = Model(inputs=layer.output, outputs=AE.outputs)
+            auto_input = Input(shape=self.visual.img_shape)
+            encoded = self.visual.encoder(auto_input)
+            decoded = self.visual.decoder(encoded)
+            self.visual.autoencoder = Model(auto_input, decoded)
+            self.visual.autoencoder.compile(loss='mse', optimizer=self.visual.optimizer)
+            
             print('FILE '+gameID+' autoencoder_p'+str(self.pl)+'.h5 LOADED')
         else:
-            print('FILE DOES NOT EXIST')
+            print(f'FILE DOES NOT EXIST: {file_path}')
 
     '''def load_model(self):
         file_path = os.path.abspath('./data/autoencoders/trained/autoencoder_p'+str(self.pl)+'.h5')
