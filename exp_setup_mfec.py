@@ -22,7 +22,7 @@ def id_generator(length=8, chars=string.ascii_lowercase + string.digits):
 
 def create_env(seed, work_id, basePath, game_ID='doubleTmaze', arenas_n=10, docker=True, env_view=True, save_data=False, capsule=True):
 
-    timescale = 5
+    timescale = 30
     target_framerate = -1
 
     if arenas_n > 0:
@@ -66,17 +66,19 @@ def create_env(seed, work_id, basePath, game_ID='doubleTmaze', arenas_n=10, dock
     print("GENERATING ENVIRONMENT...")
     print("ARENA: ", arena_config_in)
 
+    port = 5005 + random.randint(0, 1000)
     aai_env = AnimalAIEnvironment(
         file_name=basePath,  # Path to the environment
         arenas_configurations=arena_config_in,  # need to supply one to start with 
-        worker_id=work_id,  # Unique ID for running the environment (used for connection)
         seed=seed,  # The random seed
         play=False,  # Set to False for training
-        inference=env_view,  # Set to true to watch your agent in action
+        inference=False,  # Set to true to watch your agent in action
         resolution=84,  # Int: resolution of the agent's square camera (in [4,512], default 84)
+        useRayCasts=False,
+        useCamera=True,
         timescale=timescale,
         targetFrameRate=target_framerate,
-        log_folder="./logs/",
+        base_port=port,
     )
     env = UnityToGymWrapper(aai_env, uint8_visual=True, allow_multiple_obs=False, flatten_branched=True)
     aai_env.reset(arenas_configurations=arena_config_in,
